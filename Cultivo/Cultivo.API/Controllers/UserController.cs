@@ -2,14 +2,16 @@
 using Cultivo.Domain.Factories;
 using Cultivo.Domain.Interfaces.Services;
 using Cultivo.Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
 namespace Cultivo.API.Controllers
 {
-    [Route("api/user")]
+    [Route("api/users")]
     [ApiController]
+    [Authorize]
     [Produces(MediaTypeNames.Application.Json)]
     public class UserController : ControllerBase
     {
@@ -23,6 +25,7 @@ namespace Cultivo.API.Controllers
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] NewUserDTO newUser)
         {
