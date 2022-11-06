@@ -18,6 +18,8 @@ namespace Cultivo.API
 
         public virtual void ConfigureServices(IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<IAuthService, AuthService>();
+
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
 
