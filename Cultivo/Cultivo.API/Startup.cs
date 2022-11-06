@@ -3,7 +3,10 @@ using Cultivo.Domain.Interfaces.Services;
 using Cultivo.Persistence.Context;
 using Cultivo.Persistence.Repositories;
 using Cultivo.Service.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Cultivo.API
 {
@@ -31,6 +34,26 @@ namespace Cultivo.API
                 options.UseSqlServer(connection);
 
             });
+
+            var secretKey = "ZWRpw6fDo28gZW0gY29tcHV0YWRvcmE";
+
+            serviceCollection.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = true;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
         }
     }
 }
