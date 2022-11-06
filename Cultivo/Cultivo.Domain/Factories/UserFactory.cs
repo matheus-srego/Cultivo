@@ -22,5 +22,17 @@ namespace Cultivo.Domain.Factories
 
             return user;
         }
+
+        public static User Update(UpdateUserDTO updateUser, User user)
+        {
+            user.Id = updateUser.Id;
+            user.Name = updateUser.Name;
+            user.LastName = updateUser.LastName;
+            user.Email = updateUser.Email;
+            user.Password = updateUser.Password;
+            user.PhotoURL = updateUser.PhotoURL.ToString();
+
+            return user;
+        }
     }
 }
