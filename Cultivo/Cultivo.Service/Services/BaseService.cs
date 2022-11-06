@@ -18,6 +18,10 @@ namespace Cultivo.Service.Services
             _baseRepository = baseRepository;
         }
 
+        public async Task<T> GetByIdAsync(int id) => await _baseRepository.GetByIdAsync(id);
+
         public async Task<T> CreateAsync(T entity) => await _baseRepository.CreateAsync(entity);
+
+        public async Task<T> UpdateAsync(T entity) => await _baseRepository.UpdateAsync(entity);
     }
 }
