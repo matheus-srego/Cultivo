@@ -13,4 +13,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Cultivo.Persistence\Cultivo.Persistence.csproj" />
+    <ProjectReference Include="..\Cultivo.Service\Cultivo.Service.csproj" />
+  </ItemGroup>
+
 </Project>
