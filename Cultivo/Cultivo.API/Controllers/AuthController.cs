@@ -7,24 +7,28 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Cultivo.API.Controllers
 {
-    [Route("api/account")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public AuthController(IUserService userService)
+        public AuthController(IAuthService authService)
         {
-            _userService = userService;
+            _authService = authService;
         }
 
-        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] NewUserDTO newUser)
+        public async Task<IActionResult> Login([FromBody] Login login)
         {
-            return Ok(await _userService.CreateAsync(UserFactory.Create(newUser)));
+            var token = _authService.GenerateToken(login);
+
+            return Ok(new
+            {
+                Token = token,
+                User = login
+            });
         }
+
     }
 }
