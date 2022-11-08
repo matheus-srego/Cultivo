@@ -2,6 +2,7 @@
 using Cultivo.Domain.Factories;
 using Cultivo.Domain.Interfaces.Services;
 using Cultivo.Domain.Models;
+using Cultivo.Service.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,10 @@ namespace Cultivo.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] NewUserDTO newUser)
         {
-            return Ok(await _userService.CreateAsync(UserFactory.Create(newUser)));
+            if(newUser == null)
+                return NotFound();
+
+            return  Ok(await _userService.CreateAsync<UserValidator>(UserFactory.Create(newUser)));
         }
 
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
@@ -40,8 +44,8 @@ namespace Cultivo.API.Controllers
         {
             var user = await _userService.GetByIdAsync(updateUser.Id);
             var userUpdated = UserFactory.Update(updateUser, user);
-
-            return Ok(await _userService.UpdateAsync(userUpdated));
+            
+            return Ok(await _userService.UpdateAsync<UserValidator>(userUpdated));
         }
 
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
