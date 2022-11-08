@@ -43,5 +43,14 @@ namespace Cultivo.API.Controllers
 
             return Ok(await _userService.UpdateAsync(userUpdated));
         }
+
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            return Ok(await _userService.DeleteAsync(id));
+        }
     }
 }
