@@ -1,4 +1,5 @@
 ﻿using Cultivo.Domain.Models;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,10 @@ namespace Cultivo.Domain.Interfaces.Services
     public interface IBaseService<T> where T : BaseEntity
     {
         Task<T> GetByIdAsync(int id);
-        Task<T> CreateAsync(T entity);
-        Task<T> UpdateAsync(T entity);
+        Task<T> CreateAsync<TValidator>(T entity) where TValidator : AbstractValidator<T>;
+        Task<T> UpdateAsync<TValidator>(T entity) where TValidator : AbstractValidator<T>;
         Task<T> DeleteAsync(int id);
+
+        void Validate(T entity, AbstractValidator<T> validator);
     }
 }
