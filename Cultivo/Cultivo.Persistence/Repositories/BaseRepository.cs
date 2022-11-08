@@ -41,5 +41,15 @@ namespace Cultivo.Persistence.Repositories
 
             return entity;
         }
+
+        public async Task<T> DeleteAsync(int id)
+        {
+            var entity = await GetByIdAsync(id);
+
+            _query.Remove(entity);
+            await _context.SaveChangesAsync();
+
+            return entity;
+        }
     }
 }
