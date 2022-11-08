@@ -23,5 +23,7 @@ namespace Cultivo.Service.Services
         public async Task<T> CreateAsync(T entity) => await _baseRepository.CreateAsync(entity);
 
         public async Task<T> UpdateAsync(T entity) => await _baseRepository.UpdateAsync(entity);
+
+        public async Task<T> DeleteAsync(int id) => await _baseRepository.DeleteAsync(id);
     }
 }
