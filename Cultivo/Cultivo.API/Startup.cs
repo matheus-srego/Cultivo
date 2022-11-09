@@ -1,4 +1,5 @@
-﻿using Cultivo.Domain.Interfaces.Repositories;
+﻿using Cultivo.Domain.Constants;
+using Cultivo.Domain.Interfaces.Repositories;
 using Cultivo.Domain.Interfaces.Services;
 using Cultivo.Persistence.Context;
 using Cultivo.Persistence.Repositories;
@@ -55,5 +56,13 @@ namespace Cultivo.API
                     };
                 });
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls(Endpoints.MVC_URL);
+                });
     }
 }
