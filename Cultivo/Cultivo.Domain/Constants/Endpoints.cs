@@ -10,8 +10,12 @@ namespace Cultivo.Domain.Constants
     {
         public const string HEADER_VALUE = "application/json";
 
-        public const string URL = "";
+        public const string API_URL = "https://localhost:7001/";
 
-        public const string API_USER = "api/user";
+        public const string MVC_URL = "https://localhost:7006/";
+
+        public const string ENDPOINT_USER = "api/users";
+
+        public const string ENDPOINT_AUTH = "api/auth";
     }
 }
