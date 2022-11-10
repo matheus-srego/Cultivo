@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,11 @@ namespace Cultivo.Persistence.Repositories
         {
             _context = context;
             _query = _context.Set<T>();
+        }
+
+        public async Task<T> GetOneByCriteria(Expression<Func<T, bool>> expression)
+        {
+            return await _query.FirstOrDefaultAsync(expression);
         }
 
         public async Task<T> GetByIdAsync(int id)
