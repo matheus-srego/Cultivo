@@ -6,6 +6,7 @@ using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +20,8 @@ namespace Cultivo.Service.Services
         {
             _baseRepository = baseRepository;
         }
+
+        public async Task<T> GetOneByCriteria(Expression<Func<T, bool>> expression) => await _baseRepository.GetOneByCriteria(expression);
 
         public async Task<T> GetByIdAsync(int id) => await _baseRepository.GetByIdAsync(id);
 
