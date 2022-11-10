@@ -38,16 +38,16 @@ namespace Cultivo.API
 
             var secretKey = "ZWRpw6fDo28gZW0gY29tcHV0YWRvcmE";
 
-            serviceCollection.AddAuthentication(x =>
+            serviceCollection.AddAuthentication(optinos =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                optinos.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                optinos.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(x =>
+                .AddJwtBearer(options =>
                 {
-                    x.RequireHttpsMetadata = true;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
+                    options.RequireHttpsMetadata = true;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
