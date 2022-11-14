@@ -22,12 +22,14 @@ namespace Cultivo.API
 
         public virtual void ConfigureServices(IServiceCollection serviceCollection)
         {
+            var connection = _configuration["ConnectionString:cultivo-db"];
+
             serviceCollection.AddScoped<IAuthService, AuthService>();
 
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
 
-            var connection = _configuration["ConnectionString:cultivo-db"];
+            serviceCollection.AddMvc(otpions => otpions.EnableEndpointRouting = true);
 
             serviceCollection.AddDbContext<CultivoContext>(options =>
             {
@@ -47,16 +49,13 @@ namespace Cultivo.API
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuerSigningKey = true,
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        IssuerSigningKey = new 
-                            SymmetricSecurityKey
-                            (Encoding.ASCII.GetBytes(Endpoints.SECRET_KEY))
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Endpoints.SECRET_KEY))
                     };
                 });
 
-            serviceCollection.AddMvc(otpions => otpions.EnableEndpointRouting = true);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

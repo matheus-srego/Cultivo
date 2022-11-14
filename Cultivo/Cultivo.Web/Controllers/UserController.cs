@@ -1,9 +1,12 @@
 ﻿using Cultivo.Domain.Constants;
 using Cultivo.Web.DTOs;
 using Cultivo.Web.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Drawing.Printing;
 using System.Net.Http.Headers;
 using System.Text;
 
@@ -13,10 +16,9 @@ namespace Cultivo.Web.Controllers
     public class UserController : Controller
     {
         private readonly HttpClient _httpClient;
-
-        public UserController()
+        public UserController(HttpClient httpClient)
         {
-            _httpClient = new HttpClient();
+            _httpClient = httpClient;
         }
 
         [AllowAnonymous]

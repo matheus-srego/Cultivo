@@ -14,5 +14,11 @@ namespace Cultivo.Web.Models
         [Display(Name = ViewModels.DISPLAY_FIELD_PASSWORD)]
         [Required(ErrorMessage = ViewModels.REQUIRED_MESSAGE_PASSWORD)]
         public string Password { get; set; }
+
+        public LoginViewModel(string email, string password)
+        {
+            Email = email;
+            Password = password;
+        }
     }
 }

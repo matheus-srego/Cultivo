@@ -32,21 +32,19 @@ namespace Cultivo.Web
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                             .AddJwtBearer(options =>
-                             {
-                                 options.TokenValidationParameters = new TokenValidationParameters
-                                 {
-                                     ValidateIssuer = false,
-                                     ValidateAudience = false,
-                                     ValidateLifetime = true,
-                                     ValidateIssuerSigningKey = true,
-                                     ValidIssuer = Endpoints.API_URL,
-                                     ValidAudience = Endpoints.API_URL,
-                                     IssuerSigningKey = new
-                                        SymmetricSecurityKey
-                                        (Encoding.UTF8.GetBytes(Endpoints.SECRET_KEY))
-                                 };
-                             });
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Endpoints.API_URL,
+                        ValidAudience = Endpoints.API_URL,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Endpoints.SECRET_KEY))
+                    };
+                });
         }
     }
 }
