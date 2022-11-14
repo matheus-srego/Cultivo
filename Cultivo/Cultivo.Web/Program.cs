@@ -1,4 +1,10 @@
+using Cultivo.Web;
+
 var builder = WebApplication.CreateBuilder(args);
+IConfiguration configuration = builder.Configuration;
+
+var startup = new Startup(configuration);
+startup.ConfigureServices(builder.Services);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -16,12 +22,27 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseSession();
+
+app.Use(async (context, next) =>
+{
+    var token = context.Session.GetString("JWToken");
+    if (!string.IsNullOrEmpty(token))
+    {
+        context.Request.Headers.Add("Authorization", "Bearer " + token);
+    }
+    await next();
+});
+
+app.UseStaticFiles();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=User}/{action=Create}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
 
 app.Run();
