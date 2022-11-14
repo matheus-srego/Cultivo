@@ -27,12 +27,12 @@ namespace Cultivo.API.Controllers
             if (!ModelState.IsValid || (login == null) ||
                (login.Email == null || login.Email == "") ||
                (login.Password == null || login.Password == ""))
-                return BadRequest(Exceptions.MESSAGE_INCOMPLETE_INFORMATION);
+                return BadRequest(new { Message = Exceptions.MESSAGE_INCOMPLETE_INFORMATION });
 
             var userExists = await _userService.GetOneByCriteriaAsync(model => (model.Email == login.Email) && (model.Password == login.Password));
             
             if (userExists == null)
-                return BadRequest(Exceptions.MESSAGE_USER_NOT_EXIST);
+                return BadRequest(new { Message = Exceptions.MESSAGE_USER_NOT_EXIST });
 
             var token = _authService.GenerateToken(login);
 

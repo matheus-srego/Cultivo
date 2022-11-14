@@ -33,7 +33,7 @@ namespace Cultivo.API.Controllers
             if(newUser == null)
                 return NotFound();
 
-            return  Ok(await _userService.CreateAsync<UserValidator>(UserFactory.Create(newUser)));
+            return Ok(await _userService.CreateAsync<UserValidator>(UserFactory.Create(newUser)));
         }
 
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
