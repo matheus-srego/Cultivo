@@ -12,10 +12,10 @@ namespace Cultivo.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IAuthService _authService;
+        private readonly ITokenService _authService;
         private readonly IUserService _userService;
 
-        public AuthController(IAuthService authService, IUserService userService)
+        public AuthController(ITokenService authService, IUserService userService)
         {
             _authService = authService;
             _userService = userService;

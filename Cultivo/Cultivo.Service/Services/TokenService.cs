@@ -8,15 +8,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cultivo.Domain.Constants;
 
 namespace Cultivo.Service.Services
 {
-    public class AuthService : IAuthService
+    public class TokenService : ITokenService
     {
         public string GenerateToken(Login login)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("ZWRpw6fDo28gZW0gY29tcHV0YWRvcmE");
+            var key = Encoding.ASCII.GetBytes(Endpoints.SECRET_KEY);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {

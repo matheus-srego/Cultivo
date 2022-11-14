@@ -2,12 +2,7 @@
 using Cultivo.Domain.Models;
 using Cultivo.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cultivo.Persistence.Repositories
 {
@@ -22,15 +17,8 @@ namespace Cultivo.Persistence.Repositories
             _query = _context.Set<T>();
         }
 
-        public async Task<T> GetOneByCriteriaAsync(Expression<Func<T, bool>> expression)
-        {
-            return await _query.FirstOrDefaultAsync(expression);
-        }
-
-        public async Task<T> GetByIdAsync(int id)
-        {
-            return await _query.FindAsync(id);
-        }
+        public async Task<T> GetOneByCriteriaAsync(Expression<Func<T, bool>> expression) => await _query.FirstOrDefaultAsync(expression);
+        public async Task<T> GetByIdAsync(int id) => await _query.FindAsync(id);
 
         public async Task<T> CreateAsync(T entity)
         {

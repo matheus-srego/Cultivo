@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Cultivo.Domain.DTOs
+﻿namespace Cultivo.Domain.DTOs
 {
     public class NewUserDTO
     {
@@ -13,5 +7,14 @@ namespace Cultivo.Domain.DTOs
         public string Email { get; set; }
         public string Password { get; set; }
         public string PhotoURL { get; set; }
+
+        public NewUserDTO(string name, string lastName, string email, string password, string photoURL)
+        {
+            Name = name;
+            LastName = lastName;
+            Email = email;
+            Password = password;
+            PhotoURL = photoURL;
+        }
     }
 }

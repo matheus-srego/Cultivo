@@ -24,7 +24,7 @@ namespace Cultivo.API
         {
             var connection = _configuration["ConnectionString:cultivo-db"];
 
-            serviceCollection.AddScoped<IAuthService, AuthService>();
+            serviceCollection.AddScoped<ITokenService, TokenService>();
 
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IUserRepository, UserRepository>();

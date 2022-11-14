@@ -2,8 +2,8 @@
 
 namespace Cultivo.Domain.Interfaces.Services
 {
-    public interface IUserService : IBaseService<User>
+    public interface ITokenService
     {
-        // ---
+        string GenerateToken(Login login);
     }
 }
