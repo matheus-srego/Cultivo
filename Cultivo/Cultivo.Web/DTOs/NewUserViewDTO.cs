@@ -32,6 +32,11 @@ namespace Cultivo.Web.DTOs
         [Display(Name = ViewModels.DISPLAY_FIELD_PHOTO)]
         public string PhotoURL = "";
 
+        public NewUserViewDTO()
+        {
+            // ---
+        }
+
         public NewUserViewDTO(string name, string lastName, string email, string password, string photoURL)
         {
             Name = name;

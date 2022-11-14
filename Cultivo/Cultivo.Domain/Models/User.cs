@@ -8,6 +8,11 @@
         public string Password { get; set; }
         public string PhotoURL { get; set; }
 
+        public User()
+        {
+            // ---
+        }
+
         public User(string name, string lastName, string email, string password, string photoURL)
         {
             Name = name;

@@ -31,6 +31,11 @@ namespace Cultivo.Web.Models
         [Display(Name = ViewModels.DISPLAY_FIELD_PHOTO)]
         public string PhotoURL { get; set; }
 
+        public UserViewModel()
+        {
+            // ---
+        }
+
         public UserViewModel(string name, string lastName, string email, string password, string photoURL)
         {
             Name = name;
