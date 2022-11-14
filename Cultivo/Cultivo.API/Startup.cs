@@ -36,8 +36,6 @@ namespace Cultivo.API
 
             });
 
-            var secretKey = "ZWRpw6fDo28gZW0gY29tcHV0YWRvcmE";
-
             serviceCollection.AddAuthentication(optinos =>
             {
                 optinos.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -50,11 +48,15 @@ namespace Cultivo.API
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey)),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        IssuerSigningKey = new 
+                            SymmetricSecurityKey
+                            (Encoding.ASCII.GetBytes(Endpoints.SECRET_KEY))
                     };
                 });
+
+            serviceCollection.AddMvc(otpions => otpions.EnableEndpointRouting = true);
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
