@@ -17,5 +17,7 @@ namespace Cultivo.Domain.Constants
         public const string ENDPOINT_USER = "api/users";
 
         public const string ENDPOINT_AUTH = "api/auth";
+
+        public const string SECRET_KEY = "ZWRpw6fDo28gZW0gY29tcHV0YWRvcmE";
     }
 }
