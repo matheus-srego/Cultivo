@@ -22,7 +22,7 @@ namespace Cultivo.Persistence.Repositories
             _query = _context.Set<T>();
         }
 
-        public async Task<T> GetOneByCriteria(Expression<Func<T, bool>> expression)
+        public async Task<T> GetOneByCriteriaAsync(Expression<Func<T, bool>> expression)
         {
             return await _query.FirstOrDefaultAsync(expression);
         }
