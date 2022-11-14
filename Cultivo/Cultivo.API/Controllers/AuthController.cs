@@ -26,7 +26,7 @@ namespace Cultivo.API.Controllers
         {
             if (!ModelState.IsValid || (login == null) ||
                (login.Email == null || login.Email == "") ||
-               (login.Password == null || login.Email == ""))
+               (login.Password == null || login.Password == ""))
                 return BadRequest(Exceptions.MESSAGE_INCOMPLETE_INFORMATION);
 
             var userExists = await _userService.GetOneByCriteriaAsync(model => (model.Email == login.Email) && (model.Password == login.Password));
