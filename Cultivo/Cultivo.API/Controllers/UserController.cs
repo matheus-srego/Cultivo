@@ -26,6 +26,15 @@ namespace Cultivo.API.Controllers
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("{email}")]
+        public async Task<IActionResult> GetByEmail([FromRoute] string email)
+        {
+            return Ok(await _userService.GetOneByCriteriaAsync(model => model.Email == email));
+        }
+
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] NewUserDTO newUser)

@@ -46,8 +46,9 @@ namespace Cultivo.Web.Controllers
             var token = data["token"].ToString();
             
             HttpContext.Session.SetString("JWToken", token);
+            HttpContext.Session.SetString("Email", model.Email);
 
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction("Profile", "User");
         }
     }
 }

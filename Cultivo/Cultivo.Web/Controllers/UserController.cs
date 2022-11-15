@@ -16,9 +16,9 @@ namespace Cultivo.Web.Controllers
     public class UserController : Controller
     {
         private readonly HttpClient _httpClient;
-        public UserController(HttpClient httpClient)
+        public UserController()
         {
-            _httpClient = httpClient;
+            _httpClient = new HttpClient();
         }
 
         [AllowAnonymous]
@@ -41,7 +41,7 @@ namespace Cultivo.Web.Controllers
                 StringContent content = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, Endpoints.HEADER_VALUE);
 
                 var response = await _httpClient.PostAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER, content);
-            
+
                 if (response.IsSuccessStatusCode)
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
@@ -54,6 +54,19 @@ namespace Cultivo.Web.Controllers
             {
                 return View();
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var accessToken = HttpContext.Session.GetString("JWToken");
+            var email = HttpContext.Session.GetString("Email");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
+            var user = JsonConvert.DeserializeObject<UserViewModel>(response);
+            
+            return View(user);
         }
     }
 }

@@ -19,7 +19,8 @@ namespace Cultivo.Web
         public virtual void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddControllersWithViews();
-            
+            serviceCollection.AddMvc(otpions => otpions.EnableEndpointRouting = true);
+
             serviceCollection.AddSession(options =>
             {
                 
