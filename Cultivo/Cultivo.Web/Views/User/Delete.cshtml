@@ -1,11 +1,12 @@
 ﻿@model Cultivo.Web.Models.UserViewModel
 
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Delete";
 }
 
-<h1>Profile</h1>
+<h1>Delete</h1>
 
+<h3>Are you sure you want to delete this?</h3>
 <div>
     <h4>UserViewModel</h4>
     <hr />
@@ -47,8 +48,8 @@
             @Html.DisplayFor(model => model.Id)
         </dd>
     </dl>
-</div>
-<div>
-    @Html.ActionLink("Editar Usuário", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Deletar Usuário", "Delete", new { /*id = Model.PrimaryKey */ }) |
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+    </form>
 </div>

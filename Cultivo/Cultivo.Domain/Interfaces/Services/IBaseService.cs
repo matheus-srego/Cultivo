@@ -8,6 +8,7 @@ namespace Cultivo.Domain.Interfaces.Services
     {
         Task<T> GetOneByCriteriaAsync(Expression<Func<T, bool>> expression);
         Task<T> GetByIdAsync(int id);
+        Task<IEnumerable<T>> ListUsers();
         Task<T> CreateAsync<TValidator>(T entity) where TValidator : AbstractValidator<T>;
         Task<T> UpdateAsync<TValidator>(T entity) where TValidator : AbstractValidator<T>;
         Task<T> DeleteAsync(int id);

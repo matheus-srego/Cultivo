@@ -35,6 +35,24 @@ namespace Cultivo.API.Controllers
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById([FromRoute] int id)
+        {
+            return Ok(await _userService.GetByIdAsync(id));
+        }
+
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [HttpGet]
+        public async Task<IActionResult> ListUsers()
+        {
+            return Ok(await _userService.ListUsers());
+        }
+
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] NewUserDTO newUser)

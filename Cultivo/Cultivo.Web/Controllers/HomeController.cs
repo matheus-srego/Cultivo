@@ -1,10 +1,14 @@
-﻿using Cultivo.Web.Models;
+﻿using Cultivo.Domain.Constants;
+using Cultivo.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace Cultivo.Web.Controllers
 {
@@ -12,15 +16,25 @@ namespace Cultivo.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly HttpClient _httpClient;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            _httpClient = new HttpClient();
         }
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<UserViewModel> users = new List<UserViewModel>();
+            var accessToken = HttpContext.Session.GetString("JWToken");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await _httpClient.GetAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            users = JsonConvert.DeserializeObject<List<UserViewModel>>(apiResponse);
+
+            return View(users);
         }
 
         public IActionResult Privacy()

@@ -19,6 +19,7 @@ namespace Cultivo.Persistence.Repositories
 
         public async Task<T> GetOneByCriteriaAsync(Expression<Func<T, bool>> expression) => await _query.FirstOrDefaultAsync(expression);
         public async Task<T> GetByIdAsync(int id) => await _query.FindAsync(id);
+        public async Task<IEnumerable<T>> ListUsers() => await _query.ToListAsync();
 
         public async Task<T> CreateAsync(T entity)
         {

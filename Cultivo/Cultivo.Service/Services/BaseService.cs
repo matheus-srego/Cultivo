@@ -23,6 +23,7 @@ namespace Cultivo.Service.Services
 
         public async Task<T> GetOneByCriteriaAsync(Expression<Func<T, bool>> expression) => await _baseRepository.GetOneByCriteriaAsync(expression);
         public async Task<T> GetByIdAsync(int id) => await _baseRepository.GetByIdAsync(id);
+        public async Task<IEnumerable<T>> ListUsers() => await _baseRepository.ListUsers();
         public async Task<T> DeleteAsync(int id) => await _baseRepository.DeleteAsync(id);
 
         public async Task<T> CreateAsync<TValidator>(T entity) where TValidator : AbstractValidator<T>
