@@ -7,6 +7,7 @@ namespace Cultivo.Persistence.Context
     public class CultivoContext : DbContext
     {
         protected DbSet<User> User { get; set; }
+        protected DbSet<Post> Post { get; set; }
 
         public CultivoContext(DbContextOptions<CultivoContext> options) : base(options)
         {
@@ -23,6 +24,7 @@ namespace Cultivo.Persistence.Context
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<User>(new UserMapper().Configure);
+            modelBuilder.Entity<Post>(new PostMapper().Configure);
         }
     }
 }

@@ -29,6 +29,9 @@ namespace Cultivo.API
             serviceCollection.AddScoped<IUserService, UserService>();
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
 
+            serviceCollection.AddScoped<IPostService, PostService>();
+            serviceCollection.AddScoped<IPostRepository, PostRepository>();
+
             serviceCollection.AddMvc(otpions => otpions.EnableEndpointRouting = true);
 
             serviceCollection.AddDbContext<CultivoContext>(options =>

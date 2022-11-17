@@ -13,5 +13,7 @@
         public const string ENDPOINT_USER = "api/users";
 
         public const string ENDPOINT_AUTH = "api/auth";
+
+        public const string ENDPOINT_POST = "api/post";
     }
 }

@@ -20,15 +20,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Password)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhotoURL)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -46,16 +37,7 @@
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Password)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhotoURL)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Id)
-                </td>
-                <td>
-                    @Html.ActionLink("Perfil", "User/Profile", new { id=item.Id }) |
+                    @Html.ActionLink("Perfil", "Profile", "User", new { email=item.Email })
                 </td>
             </tr>
         }

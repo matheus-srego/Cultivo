@@ -49,7 +49,7 @@ namespace Cultivo.Web.Controllers
                     JsonConvert.DeserializeObject<UserViewModel>(apiResponse);
                 }
 
-                return RedirectToAction("Auth/Login");
+                return RedirectToAction("Login", "Auth");
             }
             catch
             {
@@ -57,23 +57,29 @@ namespace Cultivo.Web.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Profile(int id)
+        [HttpGet("{email}")]
+        public async Task<IActionResult> Profile(string email)
         {
-            string response;
             var accessToken = HttpContext.Session.GetString("JWToken");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            if(id == null)
-            {
-                var email = HttpContext.Session.GetString("Email");
-                response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
-            }
-            else
-            {
-                response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + id);
-            }
 
-            var user = JsonConvert.DeserializeObject<UserViewModel>(response);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
+            var user = JsonConvert.DeserializeObject<UserWithPostsViewDTO>(response);
+
+            return View(user);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyProfile()
+        {
+            var accessToken = HttpContext.Session.GetString("JWToken");
+            var email = HttpContext.Session.GetString("Email");
+            
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            
+            var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
+            var user = JsonConvert.DeserializeObject<UserWithPostsViewDTO>(response);
             
             return View(user);
         }
@@ -108,7 +114,7 @@ namespace Cultivo.Web.Controllers
             string apiResponse = await response.Content.ReadAsStringAsync();
             JsonConvert.DeserializeObject<UserViewModel>(apiResponse);
 
-            return RedirectToAction("Profile", "User");
+            return RedirectToAction("MyProfile", "User");
         }
 
         [HttpGet]

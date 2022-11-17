@@ -7,6 +7,7 @@
 <h1>Profile</h1>
 
 <div>
+    <h4>UserViewModel</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -28,10 +29,22 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.PhotoURL)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PhotoURL)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
         </dd>
     </dl>
 </div>
@@ -53,8 +66,17 @@
                     <td>
                         @Html.DisplayFor(modelItem => item.written)
                     </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", "Post", new { id=item.Id }) |
+                        @Html.ActionLink("Detalhes", "Details", new { id=item.Id }) |
+                        @Html.ActionLink("Excluir", "Delete", "Post", new { id=item.Id })
+                    </td>
                 </tr>
             }
         }
     </tbody>
 </table>
+<div>
+    @Html.ActionLink("Editar Usuário", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Deletar Usuário", "Delete", new { /*id = Model.PrimaryKey */ }) |
+</div>

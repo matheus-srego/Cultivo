@@ -29,17 +29,17 @@ namespace Cultivo.API.Controllers
         [HttpGet("{email}")]
         public async Task<IActionResult> GetByEmail([FromRoute] string email)
         {
-            return Ok(await _userService.GetOneByCriteriaAsync(model => model.Email == email));
+            return Ok(await _userService.GetUserWithPosts(email));
         }
 
-        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        /*[ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             return Ok(await _userService.GetByIdAsync(id));
-        }
+        }*/
 
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

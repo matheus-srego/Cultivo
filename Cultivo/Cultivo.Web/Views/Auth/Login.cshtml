@@ -37,7 +37,7 @@
                         </form>
                     </div>
                     <div>
-                        <a asp-action="User\Create">Não tem uma conta, crie seu usuário!</a>
+                    @Html.ActionLink("Não tem uma conta, crie seu usuário!", "Create", "User", new { /* id = Model.PrimaryKey */ })
                     </div>
                 </div>
             </main>
