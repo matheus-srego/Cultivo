@@ -27,6 +27,12 @@ namespace Cultivo.API.Controllers
             return Ok(await _postService.CreateAsync<PostValidator>(post));
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Post post)
+        {
+            return Ok(await _postService.UpdateAsync<PostValidator>(post));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
