@@ -8,6 +8,8 @@ namespace Cultivo.Web.Models
     public class PostViewModel : BaseEntity
     {
         public int UserId { get; set; }
+        [Display(Name = "Adicione uma imagem à postagem:")]
+        public string image { get; set; }
         [Display(Name = "Escreva algo aqui:")]
         public string written { get; set; }
     }

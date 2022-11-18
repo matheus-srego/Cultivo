@@ -9,6 +9,7 @@ namespace Cultivo.Domain.Models
     public class Post : BaseEntity
     {
         public int UserId { get; set; }
+        public string image { get; set; }
         public string written { get; set; }
     }
 }

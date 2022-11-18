@@ -26,6 +26,10 @@ namespace Cultivo.Persistence.Mappers
                    .HasColumnName("id_usuario")
                    .IsRequired();
 
+            builder.Property(model => model.image)
+                   .HasColumnName("image")
+                   .IsRequired();
+
             builder.Property(model => model.written)
                    .HasColumnName("escrito")
                    .IsRequired();

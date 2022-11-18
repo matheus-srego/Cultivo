@@ -61,6 +61,38 @@ namespace Cultivo.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var accessToken = HttpContext.Session.GetString("JWToken");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_POST + "/" + id);
+            var post = JsonConvert.DeserializeObject<PostViewModel>(response);
+
+            return View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PostViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var accessToken = HttpContext.Session.GetString("JWToken");
+
+            StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, Endpoints.HEADER_VALUE);
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await _httpClient.PutAsync(Endpoints.API_URL + Endpoints.ENDPOINT_POST, content);
+            string apiResponse = await response.Content.ReadAsStringAsync();
+            JsonConvert.DeserializeObject<PostViewModel>(apiResponse);
+
+            return RedirectToAction("MyProfile", "User");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> List()
         {
             List<PostViewModel> posts = new List<PostViewModel>();
@@ -73,6 +105,32 @@ namespace Cultivo.Web.Controllers
             posts = JsonConvert.DeserializeObject<List<PostViewModel>>(apiResponse);
 
             return View(posts);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var accessToken = HttpContext.Session.GetString("JWToken");
+            
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_POST + "/" + id);
+            var post = JsonConvert.DeserializeObject<PostViewModel>(response);
+
+            return View(post);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(PostViewModel model)
+        {
+            var accessToken = HttpContext.Session.GetString("JWToken");
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+            var response = await _httpClient.DeleteAsync(Endpoints.API_URL + Endpoints.ENDPOINT_POST + "/" + model.Id);
+
+            return RedirectToAction("MyProfile", "User");
         }
     }
 }

@@ -17,8 +17,11 @@ namespace Cultivo.Web.Controllers
     public class UserController : Controller
     {
         private readonly HttpClient _httpClient;
-        public UserController()
+        private readonly string _filePath;
+
+        public UserController(IWebHostEnvironment environment)
         {
+            _filePath = environment.WebRootPath;
             _httpClient = new HttpClient();
         }
 
@@ -30,7 +33,7 @@ namespace Cultivo.Web.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> Create(NewUserViewDTO dto)
+        public async Task<IActionResult> Create(NewUserViewDTO dto, IFormFile attachment)
         {
             try
             {
@@ -38,6 +41,15 @@ namespace Cultivo.Web.Controllers
                 {
                     return View(dto);
                 }
+
+                if (!ValidateImage(attachment))
+                {
+                    return View(dto);
+                }
+
+                var file = SaveFile(attachment);
+
+                dto.PhotoURL = file;
 
                 StringContent content = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, Endpoints.HEADER_VALUE);
 
@@ -57,7 +69,7 @@ namespace Cultivo.Web.Controllers
             }
         }
 
-        [HttpGet("{email}")]
+        [HttpGet]
         public async Task<IActionResult> Profile(string email)
         {
             var accessToken = HttpContext.Session.GetString("JWToken");
@@ -66,6 +78,9 @@ namespace Cultivo.Web.Controllers
 
             var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
             var user = JsonConvert.DeserializeObject<UserWithPostsViewDTO>(response);
+
+            if (user.PhotoURL != null || user.PhotoURL != "") 
+                ViewBag.Photo = user.PhotoURL;
 
             return View(user);
         }
@@ -80,7 +95,10 @@ namespace Cultivo.Web.Controllers
             
             var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
             var user = JsonConvert.DeserializeObject<UserWithPostsViewDTO>(response);
-            
+
+            if (user.PhotoURL != null || user.PhotoURL != "")
+                ViewBag.Photo = user.PhotoURL;
+
             return View(user);
         }
 
@@ -98,12 +116,21 @@ namespace Cultivo.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(UpdateUserViewDTO model)
+        public async Task<IActionResult> Edit(UpdateUserViewDTO model, IFormFile attachment)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
+
+            if (!ValidateImage(attachment))
+            {
+                return View(model);
+            }
+
+            var file = SaveFile(attachment);
+
+            model.PhotoURL = file;
 
             var accessToken = HttpContext.Session.GetString("JWToken");
 
@@ -132,6 +159,11 @@ namespace Cultivo.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(UserViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var accessToken = HttpContext.Session.GetString("JWToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             
@@ -152,6 +184,39 @@ namespace Cultivo.Web.Controllers
         {
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "Auth");
+        }
+
+        public bool ValidateImage(IFormFile attachment)
+        {
+            switch (attachment.ContentType)
+            {
+                case "image/jpeg":
+                    return true;
+                case "image/png":
+                    return true;
+                dafault:
+                    return false;
+                    break;
+            }
+            return false;
+        }
+
+        public string SaveFile(IFormFile attachment)
+        {
+            var fileName = attachment.FileName;
+
+            var filePath = _filePath + "\\images";
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
+            using(var strem = System.IO.File.Create(filePath + "\\" + fileName))
+            {
+                attachment.CopyToAsync(strem);
+            }
+
+            return fileName;
         }
     }
 }
