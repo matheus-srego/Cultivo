@@ -1,4 +1,5 @@
 ﻿using Cultivo.Domain.Constants;
+using Cultivo.Domain.Models;
 using Cultivo.Web.DTOs;
 using Cultivo.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -37,19 +38,22 @@ namespace Cultivo.Web.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (dto == null)
                 {
                     return View(dto);
                 }
 
-                if (!ValidateImage(attachment))
+                if(attachment != null)
                 {
-                    return View(dto);
+                    if (!ValidateImage(attachment))
+                    {
+                        return View(dto);
+                    }
+
+                    var file = SaveFile(attachment);
+
+                    dto.PhotoURL = file;
                 }
-
-                var file = SaveFile(attachment);
-
-                dto.PhotoURL = file;
 
                 StringContent content = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, Endpoints.HEADER_VALUE);
 
@@ -118,19 +122,22 @@ namespace Cultivo.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UpdateUserViewDTO model, IFormFile attachment)
         {
-            if (!ModelState.IsValid)
+            if (model == null)
             {
                 return View(model);
             }
 
-            if (!ValidateImage(attachment))
+            if(attachment != null)
             {
-                return View(model);
+                if (!ValidateImage(attachment))
+                {
+                    return View(model);
+                }
+
+                var file = SaveFile(attachment);
+
+                model.PhotoURL = file;
             }
-
-            var file = SaveFile(attachment);
-
-            model.PhotoURL = file;
 
             var accessToken = HttpContext.Session.GetString("JWToken");
 
@@ -139,7 +146,9 @@ namespace Cultivo.Web.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.PutAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER, content);
             string apiResponse = await response.Content.ReadAsStringAsync();
-            JsonConvert.DeserializeObject<UserViewModel>(apiResponse);
+            var user = JsonConvert.DeserializeObject<UserViewModel>(apiResponse);
+
+            HttpContext.Session.SetString("Email", user.Email);
 
             return RedirectToAction("MyProfile", "User");
         }

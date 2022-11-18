@@ -91,7 +91,7 @@ namespace Cultivo.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UpdatePostViewModel model, IFormFile attachment)
         {
-            if (!ModelState.IsValid)
+            if (model == null)
             {
                 return View(model);
             }

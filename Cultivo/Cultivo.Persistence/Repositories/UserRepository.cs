@@ -23,7 +23,7 @@ namespace Cultivo.Persistence.Repositories
             var user = await _queryUser.FindAsync(id);
             var posts = await _queryPost.ToListAsync();
 
-            if (posts.Count() != 0)
+            if (user.posts.Count() != 0)
             {
                 foreach (var post in user.posts)
                 {
