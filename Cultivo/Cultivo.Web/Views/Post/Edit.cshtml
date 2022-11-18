@@ -1,4 +1,4 @@
-﻿@model Cultivo.Web.Models.PostViewModel
+﻿@model Cultivo.Web.DTOs.UpdatePostViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
@@ -21,6 +21,10 @@
                 <label asp-for="written" class="control-label"></label>
                 <input asp-for="written" class="form-control" />
                 <span asp-validation-for="written" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="image" class="control-label"></label>
+                <input type="file" name="attachment" class="form-control"/>
             </div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label"></label>

@@ -17,10 +17,12 @@ namespace Cultivo.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPostService _postService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IPostService postService)
         {
             _userService = userService;
+            _postService = postService;
         }
 
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
@@ -81,7 +83,7 @@ namespace Cultivo.API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            return Ok(await _userService.DeleteAsync(id));
+            return Ok(await _userService.DeleteUserWithPosts(id));
         }
     }
 }

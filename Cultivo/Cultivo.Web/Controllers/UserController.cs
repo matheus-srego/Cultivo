@@ -152,22 +152,19 @@ namespace Cultivo.Web.Controllers
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + email);
             var user = JsonConvert.DeserializeObject<UserViewModel>(response);
+            HttpContext.Session.SetInt32("userID", user.Id);
 
             return View(user);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(UserViewModel model)
+        public async Task<IActionResult> Delete(int user)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
+            var id = HttpContext.Session.GetInt32("userID");
             var accessToken = HttpContext.Session.GetString("JWToken");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             
-            var response = await _httpClient.DeleteAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + model.Id);
+            var response = await _httpClient.DeleteAsync(Endpoints.API_URL + Endpoints.ENDPOINT_USER + "/" + id);
 
             HttpContext.Session.Clear();
 

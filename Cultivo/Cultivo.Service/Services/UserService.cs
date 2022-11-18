@@ -35,5 +35,10 @@ namespace Cultivo.Service.Services
 
             return user;
         }
+
+        public async Task<User> DeleteUserWithPosts(int id)
+        {
+            return await _userRepository.DeleteUserWithPosts(id);
+        }
     }
 }

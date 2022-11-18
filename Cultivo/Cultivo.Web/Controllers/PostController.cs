@@ -1,4 +1,5 @@
 ﻿using Cultivo.Domain.Constants;
+using Cultivo.Domain.Interfaces.Services;
 using Cultivo.Domain.Models;
 using Cultivo.Web.DTOs;
 using Cultivo.Web.Models;
@@ -14,9 +15,11 @@ namespace Cultivo.Web.Controllers
     public class PostController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly string _filePath;
 
-        public PostController()
+        public PostController(IWebHostEnvironment environment)
         {
+            _filePath = environment.WebRootPath;
             _httpClient = new HttpClient();
         }
 
@@ -26,7 +29,7 @@ namespace Cultivo.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PostViewModel model)
+        public async Task<IActionResult> Create(NewPostViewDTO model, IFormFile attachment)
         {
             UserViewModel user = new UserViewModel();
             if(model.UserId == null || model.UserId == 0)
@@ -40,12 +43,25 @@ namespace Cultivo.Web.Controllers
                 user = JsonConvert.DeserializeObject<UserViewModel>(responseUser);
             }
 
-            if (!ModelState.IsValid)
+            model.UserId = user.Id;
+
+            if(attachment != null)
+            {
+                if (!ValidateImage(attachment))
+                {
+                    return View(model);
+                }
+
+
+                var file = SaveFile(attachment);
+
+                model.image = file;
+            }
+
+            if (model == null)
             {
                 return View(model);
             }
-
-            model.UserId = user.Id;
 
             StringContent content = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, Endpoints.HEADER_VALUE);
 
@@ -54,7 +70,7 @@ namespace Cultivo.Web.Controllers
             if (response.IsSuccessStatusCode)
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();
-                JsonConvert.DeserializeObject<PostViewModel>(apiResponse);
+                JsonConvert.DeserializeObject<NewPostViewDTO>(apiResponse);
             }
 
             return RedirectToAction("Index", "Home");
@@ -67,17 +83,29 @@ namespace Cultivo.Web.Controllers
 
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             var response = await _httpClient.GetStringAsync(Endpoints.API_URL + Endpoints.ENDPOINT_POST + "/" + id);
-            var post = JsonConvert.DeserializeObject<PostViewModel>(response);
+            var post = JsonConvert.DeserializeObject<UpdatePostViewModel>(response);
 
             return View(post);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(PostViewModel model)
+        public async Task<IActionResult> Edit(UpdatePostViewModel model, IFormFile attachment)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
+            }
+
+            if(attachment != null)
+            {
+                if (!ValidateImage(attachment))
+                {
+                    return View(model);
+                }
+
+                var file = SaveFile(attachment);
+
+                model.image = file;
             }
 
             var accessToken = HttpContext.Session.GetString("JWToken");
@@ -131,6 +159,39 @@ namespace Cultivo.Web.Controllers
             var response = await _httpClient.DeleteAsync(Endpoints.API_URL + Endpoints.ENDPOINT_POST + "/" + model.Id);
 
             return RedirectToAction("MyProfile", "User");
+        }
+
+        public bool ValidateImage(IFormFile attachment)
+        {
+            switch (attachment.ContentType)
+            {
+                case "image/jpeg":
+                    return true;
+                case "image/png":
+                    return true;
+                dafault:
+                    return false;
+                    break;
+            }
+            return false;
+        }
+
+        public string SaveFile(IFormFile attachment)
+        {
+            var fileName = attachment.FileName;
+
+            var filePath = _filePath + "\\images";
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+
+            using (var strem = System.IO.File.Create(filePath + "\\" + fileName))
+            {
+                attachment.CopyToAsync(strem);
+            }
+
+            return fileName;
         }
     }
 }
