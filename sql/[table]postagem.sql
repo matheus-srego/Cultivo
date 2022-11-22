@@ -1,0 +1,15 @@
+USE [cultivo_db]
+GO
+
+BEGIN TRANSACTION;
+
+CREATE TABLE [dbo].[postagem]
+(
+	[id] INT NOT NULL PRIMARY KEY IDENTITY (1, 1),
+	[id_usuario] INT NOT NULL,
+	[image] NVARCHAR(MAX),
+	[escrito] NVARCHAR(MAX) NOT NULL
+)
+GO
+
+COMMIT TRANSACTION;
